@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	<bundle bundleID="583" localization="OSGI-INF/l10n/bundle" name="org.xtext.example.mydsl.generator" project="org.xtext.example.mydsl.generator" provider="My Company"/>
+	<bundle bundleID="582" localization="OSGI-INF/l10n/bundle" name="org.xtext.example.mydsl" project="org.xtext.example.mydsl" provider="My Company"/>
+	<bundle bundleID="584" class="org.xtext.example.internal.MyDslActivator" localization="OSGI-INF/l10n/bundle" name="org.xtext.example.mydsl.ui" project="org.xtext.example.mydsl.ui" provider="My Company"/>
+</map>

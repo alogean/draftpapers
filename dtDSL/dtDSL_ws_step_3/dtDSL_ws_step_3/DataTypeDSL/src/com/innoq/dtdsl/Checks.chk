@@ -1,0 +1,11 @@
+import dtdsl;
+
+extension com::innoq::dtdsl::Extensions;
+/*
+ * This check file is used by the parser
+ * and by the editor. Add your constraints here!
+ */
+
+context Datatype ERROR "Write your constraint message here...!" :
+   true;
+

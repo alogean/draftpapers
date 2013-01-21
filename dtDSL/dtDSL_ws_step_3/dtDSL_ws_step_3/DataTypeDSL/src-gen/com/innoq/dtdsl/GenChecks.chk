@@ -1,0 +1,13 @@
+import dtdsl;
+
+extension org::openarchitectureware::xtext::parser::LinkerUtils;
+
+extension com::innoq::dtdsl::Extensions;
+
+/*
+ * check linking
+ */
+
+
+
+

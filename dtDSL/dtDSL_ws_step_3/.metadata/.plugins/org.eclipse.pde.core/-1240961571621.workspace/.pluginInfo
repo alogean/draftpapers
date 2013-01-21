@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	<bundle bundleID="860" name="dtdsl Plug-in" project="DataTypeDSL"/>
+	<bundle bundleID="862" name="DataTypeDSL.generator" project="DataTypeDSL.generator"/>
+	<bundle bundleID="861" class="com.innoq.dtdsl.DtdslEditorPlugin" localization="plugin" name="dtdsl Editor Plug-in" project="DataTypeDSL.editor">
+		<library name="."/>
+	</bundle>
+</map>

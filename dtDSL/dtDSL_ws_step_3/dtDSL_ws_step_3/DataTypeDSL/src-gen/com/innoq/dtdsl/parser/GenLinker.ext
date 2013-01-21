@@ -1,0 +1,12 @@
+
+extension com::innoq::dtdsl::Extensions;
+extension com::innoq::dtdsl::Linking;
+
+link(emf::EObject this) :
+	this.allVisibleElements().internalLink();
+
+Void internalLink(emf::EObject this) :
+	null;
+
+
+

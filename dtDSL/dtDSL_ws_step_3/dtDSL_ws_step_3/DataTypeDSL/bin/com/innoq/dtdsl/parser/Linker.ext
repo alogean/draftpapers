@@ -1,0 +1,8 @@
+
+extension com::innoq::dtdsl::Extensions;
+extension com::innoq::dtdsl::parser::GenLinker reexport;
+
+/*
+ * If you need more sophisticated linker semantic just overwrite the linker extensions here and add your own logic.
+ * Have a look at the generated com::innoq::dtdsl::parser::GenLinker (typically located in src-gen)
+ */

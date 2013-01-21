@@ -1,0 +1,9 @@
+import dtdsl;
+
+extension com::innoq::dtdsl::Extensions reexport;
+extension com::innoq::dtdsl::GenEditorExtensions reexport;
+
+/*
+ * use this file to overwrite the label() and the image()
+ * extension for your model elements
+ */

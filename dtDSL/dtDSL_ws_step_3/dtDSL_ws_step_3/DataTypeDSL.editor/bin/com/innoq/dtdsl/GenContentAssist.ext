@@ -1,0 +1,55 @@
+import dtdsl;
+import codeassist;
+
+extension com::innoq::dtdsl::EditorExtensions;
+
+/* proposals for Feature Datatype::description */
+List[Proposal] completeDatatype_description(emf::EObject ctx, String prefix) :
+	{newProposal("DatatypeDescription")};
+
+/* proposals for Feature PrimitiveDatatype::name */
+List[Proposal] completePrimitiveDatatype_name(emf::EObject ctx, String prefix) :
+	{newProposal("PrimitiveDatatypeName")};
+
+/* proposals for Feature Datatype::version */
+List[Proposal] completeDatatype_version(emf::EObject ctx, String prefix) :
+	{newProposal("DatatypeVersion")};
+
+/* proposals for Feature Datatype::name */
+List[Proposal] completeDatatype_name(emf::EObject ctx, String prefix) :
+	{newProposal("DatatypeName")};
+
+
+
+/* proposals for Feature PrimitiveDatatype::type */
+List[Proposal] completePrimitiveDatatype_type(emf::EObject ctx, String prefix) :
+	{};
+
+
+
+
+
+
+List[Proposal] sortProposals(List[Proposal] proposalsToSort):
+	proposalsToSort;
+
+isKeywordProposal(Proposal this):
+	type == codeassist::Type::KEYWORD;
+
+isAssignmentProposal(Proposal this):
+	type == codeassist::Type::ASSIGNMENT;
+	
+isEnumProposal(Proposal this):
+	type == codeassist::Type::ENUM_LITERAL;
+
+// create extensions
+Proposal newProposal(String proposal) :
+	newProposal(proposal,proposal);
+	
+Proposal newProposal(String label, String toReplace) :
+	newProposal(label,toReplace,"default.gif");
+	
+create Proposal newProposal(String label, String replace, String image) :
+	setLabel(label==null?"ERROR":label)->
+	setToInsert(replace==null?"ERROR":replace)->
+	setImage(image);

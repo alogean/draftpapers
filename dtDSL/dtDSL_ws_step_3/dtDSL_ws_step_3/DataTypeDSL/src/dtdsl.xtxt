@@ -1,0 +1,31 @@
+/*
+   grammar definition: dtdsl.xtxt
+   Author: Antoine Logean
+   Date:   9 April 2009
+*/
+
+// Abstract type rule
+ReusableDatatype:
+	PrimitiveDatatype | Datatype
+;
+
+// Type rule
+PrimitiveDatatype:
+	"primitiveDatatype"	name=ID "{"
+		"@type" type=PrimitiveDatatypes
+	"}"
+;
+
+// Type rule
+Datatype:
+	"datatype" name=ID "{" 
+		"@description" description=STRING
+		"@version" version=INT
+	"}"
+; 
+
+// Enumeration rule
+Enum PrimitiveDatatypes:
+	stringDT="string" | charDT="char" | booleanDT="boolean" | shortDT="short" |
+	longDT="long" |	floatDT="float" | integerDT="integer" | octetDT="octet"
+;

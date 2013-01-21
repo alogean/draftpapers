@@ -1,0 +1,112 @@
+\documentclass[a4paper,10pt]{article}
+
+
+%opening
+\title{GigaSpaces Grid Technologies Empowering
+Drug Discovery}
+\author{A. Logean}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The aim of this work is to show how the GigaSpaces grid technology provides technical solutions to the volume of data and computational demands associated with drug discovery by delivering larger computing capability (flexible resource sharing) and providing coordinated access to large data resources. This is illustrated with two applications: one in structural genomics one in cheminformatics. In both case we show the speedup reached by the parallel processing of a large libraries of ligands and protein structures. Based on these two use cases the system is challenged by using different work load (scalability on-demand) for different grid topologies (replicated, partitioned, or local cached). 
+\end{abstract}
+
+\section{Introduction}
+\subsection{Computational challenges of the pharmaceutical research}
+
+The rapid accumulation of digital information (genomics, proteomics, metabolomics, ...) and modeling knowledge (molecular and system models)  for biological systems, is driving a growing use of computing in pharmaceutical research. The tremendous human and financial stakes in the race to develop effective therapeutics and bring them to the market, motivates not only the use of computer technology to support traditional discovery techniques, but also the exploitation of novel in silico techniques for drug discovery. The volumes of data being generated and the amount of computing needed to process and extract meaning from those data is exploding. In fact, computational power is increasingly becoming the limiting step in drug design and discovery.
+
+\subsection{The GigaSpaces Grid technology}
+\begin{itemize}
+ \item advantages of the SBA over other grid technologies
+ \item easy deployment
+ \item ...
+\end{itemize}
+
+
+\section{Use Cases}
+\subsection{Large Scaled Comparative Protein Modelling}
+\subsubsection{Introduction}
+Insights into the three-dimensional (3D) structure of a protein are of great assistance when planning experiments aimed at the understanding of protein function and during the drug design process. The experimental elucidation of the 3D-structure of proteins is however often hampered by difficulties in obtaining sufficient protein, diffracting crystals and many other technical aspects. Therefore the number of solved 3D-structures increases only slowly compared to the rate of sequencing of novel cDNAs, and no structural information is available for the vast majority of the protein sequences. By using comparative protein modeling one can fill this gap.
+
+Comparative protein modeling uses previously solved structures as starting points, or templates. This is effective because it appears that although the number of actual proteins is vast, there is a limited set of tertiary structural motifs to which most proteins belong. It has been suggested that there are only around 2000 distinct protein folds in nature, though there are many millions of different proteins.
+
+The Protein Data Bank (PDB)  [2] is a repository of large biological molecules (mainly proteins and DNAs) for which the 3D structures were experimentally determined. The PDB contains today around 50'000 entries [3]. Parallel to this, the genomic (that aims to sequence the genome of organism genomes) produces a growing numbers of protein sequences for which the structures is not known. These sequences can be found in the
+SwissProt repository (more specifically the UniProt/TrEMBL repository). Today the TrEMBL database contains more as 6'000'000 protein sequences[4].
+
+\subsubsection{Architecture}
+The architecture of the system is composed of the following components:
+\begin{enumerate}
+ \item \textbf{Protein Data Grid}
+
+The data grid implemented as a cluster of spaces organized in one of several predefined topologies. The data grid is spread on n physical nodes. Each physical node hosts a data grid insance with its associated space. 
+For an application trying to access data, the cluster appears as one space, but in fact consists of several spaces which are distributed across the n physical machines.
+
+\item \textbf{Protein Domain Model}
+
+Divers objects (ProteinRowData, ProteinStructure, ProteinMetaData, ProteinSSFragment, ProteinReport) are defined as java beans (POJO). These beans make use of Biojava objects (Biojava is a java framework for processing biological data, see [1]). 
+Different data partitioning criteria are defined by annotating bean attributes (protein id, protein familly, protein 3D folds, ...).
+Some objects are persisted in a database.
+
+\item \textbf{Protein Data Loader}
+
+The data loader (a simple Java Standalone application) writes row data to the grid via a proxy space. This data are taken from the Protein Data Bank [2] (~50'000 proteins) and from the SwissProt [4] repository (6'000'000 sequences).
+
+\item \textbf{Protein Data Readers}
+
+A data reader is any remote data consumer with read-only access to the grid (via a proxy space). We will use Bioclipse [5] as data reader in order to visualize the 3D structures.
+ 
+\item \textbf{Protein Data Processors}
+
+A protein data processor processes protein objects contained in the data grid. The processes can be chained by using notification. It is those possible to build complex multi-step precessing chain. Important is to group interdependant processors in the same Process Unit (PU). 
+
+Example of a processors in a PU:
+
+\begin{itemize}
+ \item \textit{P1 : preprocessing of row data}
+
+A ProteinRowData object is taken from space, meta data are extracted and store in a  ProteinMetaData object, 3D data are extracted and put in a ProteinRowStructure object. ProteinMetaData and ProteinRowStructure are put in the space.
+→ notify P2 and P5
+
+
+\item \textit{P2 : preprocessing of 3D data}
+
+A ProteinRowStructure object is take, the 3D coordinates are parsed, 3D information are cleaned (water molecules, hydrogen atoms and ligands are removed, missing atoms are added).  A new ProteinStructure object is create and written back in the space. 
+→ notify P3
+
+\item \textit{P3 : Secondary structure prediction}
+
+Take a ProteinStructure object and performs a secondary structure prediction. Update the corresponding ProteinMetaData object.
+→ notify P4 and P5
+
+\item \textit{P4 : Secondary Structure Fragementation}
+
+Take a ProteinStructure and ProteinMetaData objects. Following the secondary structure prediction defined by the ProteinMetaData object creates n ProteinSSFragement objects and put them in the space.
+
+\item \textit{P5 : reporting}
+
+Generate or update a ProteinReport object for each ProteinMetaData object.
+\end{itemize}
+
+\item \textbf{Protein Data Base}
+
+ProteinStructure, ProteinMetaData, ProteinReport and ProteinSSFragment objects are declared as persistent and are store asynchronously in a RDBS.
+
+\end{enumerate}
+
+\subsubsection{Results and Discussion}
+
+
+
+\subsection{Large scale molecular similarity search}
+\subsubsection{Introduction}
+\subsubsection{Results and Discussion}
+
+
+\section{Conclusion}
+
+
+\end{document}

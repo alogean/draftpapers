@@ -1,0 +1,12 @@
+<plugin>
+   
+   
+   
+   <extension
+         point="org.eclipse.emf.ecore.extension_parser">
+      <parser
+            class="com.innoq.dtdsl.resource.dtdslResourceFactory"
+            type="dtdsl">
+      </parser>
+   </extension>
+</plugin>

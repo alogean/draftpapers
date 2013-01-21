@@ -1,0 +1,302 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+
+  <title>OWL -- UML Notations</title>
+</head><body>
+
+<h1>A UML Presentation Syntax for OWL Lite</h1>
+
+<em>
+Author: Guus Schreiber
+</em><p>
+<em>Created:: April 3, 2002<br>
+Last update: April 19, 2002
+</em></p><p>
+<em>Incomplete draft, intended for internal Webont discussions. 
+Please do not distribute.
+The note is based on an OWL language proposal for the Webont April
+2002 face-to-face meeting in Amsterdam. 
+</em>
+
+</p><h2>Purpose of this document</h2>
+
+This document describes a UML-based presentation syntax of the web ontology
+language OWL. OWL is text-based; the UML presentation syntax uses,
+where possible, the graphical conventions of the UML class and object
+diagrams. The presentation syntax could make it easier for main-stream
+software developers to understand OWL and could also be used by OWL
+editing tools. In places where a graphical notation is impossible, the
+language will have to revert to OWL itself, in a similar manner as OCL
+(the Object Constraint Language) is used for regular UML. 
+<p>
+@@Add a few lines about ontologies as shared data models, etc.@@
+</p><p>
+This document assumes basic knowledge of UML class and object diagrams. 
+We use the UML notation as described in the UML User Guide [1]. 
+Note that there are syntax variations between UML sources. 
+
+</p><h1>Terminology</h1>
+
+OWL is based on the data model of RDF. This data model distinguishes
+three basic notions: "resource", "literal" and "property". 
+<p>
+A resource can be  anything that has a URI. A 
+literal is a data value, such as a string or a
+number. Loosely speaking, resource and literal correspond to the UML
+notion of, respectively, object and value. OWL defines "classes" of resources,
+similar to UML object classes. 
+</p><p>
+A property defines a directed relationship from a resource to a
+resource or literal.  OWL distinguishes two types of properties: (1)
+an "object property" linking a resource to a resource, and (2) a
+"datatype property" linking a resource to a literal. Loosely speaking,
+an object property corresponds to a UML association and a datatype
+property to a UML  attribute.
+
+</p><h2>UML notations for OWL Lite</h2>
+ 
+<h3>Classes and subclasses</h3> 
+
+An OWL class is shown in a similar fashion as a UML class. Note that
+ontologies typically do not specify class behavior, so the operation
+compartment will stay empty. Classes may have subclasses. This is
+shown through a UML generalization (open triangle arrow). 
+
+<p>
+<em>
+[LANG note: proposal to drop "primitive classes" and use "class"
+instead. This implies that, by default, classes are primitive.]
+</em>
+ 
+</p><center>
+<p>
+<img src="owl-uml_fichiers/owl-class.jpg">
+</p><p>
+<em>A class with two subclasses</em>
+</p><p>
+</p></center>
+
+<h3>Datatype properties</h3>
+
+Datatype properties (i.e. properties linking an object to a literal)
+are typically shown as class attributes of the class that acts as domain
+of the property. OWL uses XML Schema to define
+datatypes. For example, <code>xsd:NonNegativeNumber</code> refers to
+the the XML Schema datatype <code>NonNegativeNumber</code>. 
+<p>
+Property cardinality is indicated in UML by a postfix of the attribute
+name, e.g. <code>age[1..1]</code> is a single-valued required
+attribute, and <code>phoneNumber[0..*]</code> defines an optional and
+multi-valued attribute. 
+</p><p>
+Alternatively, OWL
+allows the specification of an enumeration of data values  as value
+range for a property. For this we use the UML notation for an
+enumeration datatype [1, p. 59]: the datatype is represented through a
+class box labeled with the <code>&lt;&lt;enumeration&gt;&gt;</code>
+stereotype. The data values are listed in the attribute box. The
+figure below shows an example of this for the enumeration datatype
+<code>Height</code>. Prefixing the data values with the datatype (as
+done in the figure) is strictly speaking not part of the UML syntax. 
+
+</p><center>
+<p>
+<img src="owl-uml_fichiers/owl-attribute.jpg">
+</p><p>
+<em>A class with three datatype properties</em>
+</p><p>
+</p></center>
+
+An alternative UML representation for datatype properties is to use an
+UML association (see below). This notation is needed if one wants to
+express a <code>subproperty</code> relation between datatype properties. 
+<p>
+[TODO: UniquelyIdentifyingProperty: either add constraint or show as association]
+
+</p><h3>Object properties</h3>
+
+An object property is shown as a binary UML association between
+classes. As object properties have a direction (from-to) the UML
+convention of an arrowhead indicatiing this direction should be used
+(see the figure below). 
+<p>
+Cardinality (in UML terminology: multiplicity) can be
+defined for both ends of the relation. This allows specification of
+the OWL cardinality definitions:
+</p><ul>
+<li>Required property: a minimum cardinality of "1" for the "to-class". 
+</li><li>Single/multi-valued property: "1" respectively "*" as the maximum cardinality for the
+"to-class". 
+</li><li>Unique property: a "0..1" or "1..1" cardinality for the
+"from-class".   
+</li></ul>
+
+The figure below shows an example of an object property
+<code>HasParent</code>. The arrowhead following the association name
+indicates the direction of the property (in this example the domain and
+range are of the same class). The cardinality is specified in the OWL
+Lite manner. In UML it would have been easy to restrict the cardinality
+of the "to-class" to "2..2".
+ 
+<center>
+<p>
+<img src="owl-uml_fichiers/owl-association.jpg">
+</p><p>
+<em>An object property is shown as an association between classes</em>
+</p><p>
+</p></center>
+
+
+<h3>Subproperty relation</h3>
+
+A subproperty relation 
+can be shown in UML only if the property is modelled as an
+association. This may be a reason to choose an "association" notation
+instead of an "attribute" notation for a datatype property. In that
+case you should make sure that the "to-class" of the association has a
+UML stereotype <code>&lt;&lt;datatype&gt;&gt;</code> (or one of its
+specializations). 
+<p>
+The clearest way of modelling a subproperty relation is to model the
+associations involved as a UML association class (a standard UML
+mechanism for treating associations as classes). The association
+classes can then be linked with a UML generalization (as between
+regular classes). One can add a custom stereotype
+<code>&lt;&lt;subproperty&gt;&gt;</code> for clarity purposes.  
+</p><p>
+The figure below shows an example subproperty
+relation. The property <code>HasMother</code> is defined as a
+subproperty of <code>HasParent</code>.  
+
+</p><center>
+<p>
+<img src="owl-uml_fichiers/owl-subproperty.jpg">
+</p><p>
+<em>An subproperty relation between two object properties represented
+as UML association classes</em>
+</p><p>
+</p></center>
+
+<h3>Transitive property</h3>
+
+The association-class notation can also be used to indicate that a
+property is transitive. For this purpose, we assume there
+exists a metaclass <code>TransitiveProperty</code> (probably defined
+as a subclass of <code>Property</code>) of which the association is an
+instance. The instance-of relation is shown in UML through a
+dependency with an <code>&lt;&lt;instance&gt;&gt;</code>
+stereotype. The figure below shows an example of this for a
+<code>HasAncestor</code> property. 
+
+<center>
+<p>
+<img src="owl-uml_fichiers/owl-transitive.jpg">
+</p><p>
+<em>Specification of a transitive property</em>
+</p><p>
+</p></center>
+
+<h3>Disjointness and identity</h3>
+
+Disjointness between classes can be shown with the predefined UML
+constraint <code>Disjoint</code> [1, p. 143]. A constraint is shown as
+a UML annotation with the stereotype
+<code>&lt;&lt;constraint&gt;&gt;</code>. The constraint should be
+linked with a dependency relation to the classes concerned.
+
+<center>
+<p>
+<img src="owl-uml_fichiers/owl-disjoint.jpg">
+</p><p>
+<em>Disjointness of two classes</em>
+</p><p>
+</p></center>
+
+The OWL language constructs for identity (<code>SameClassAs</code>
+<code>SamePropertyAs</code> and <code>SameIndividualAs</code> can be
+defined in a similar fashion, namely by introducing a UML constraint with
+the same name (unlike <code>disjoint</code>, these are not predefined
+by UML). 
+
+<center>
+<p>
+<img src="owl-uml_fichiers/owl-sameclass.jpg">
+</p><p>
+<em><code>Person</code> and <code>Human</code> denote the same class</em>
+</p><p>
+</p></center>
+   
+<h3>Defined classes</h3>
+
+Defined classes are classes with necessary and sufficient properties
+to determine class membership. 
+<p>
+A defined class is shown as a regular UML class with a stereotype
+<code>&lt;&lt;defined class&gt;&gt;</code>.  
+
+</p><center>
+<p>
+<img src="owl-uml_fichiers/owl-definedclass.jpg">
+</p><p>
+<em>A "defined class" is shown through a UML class stereotype</em>
+</p><p>
+</p></center>
+
+
+<h3>Individuals</h3>
+
+Individuals are shown with the UML notation for objects. The object is
+linked with an "instance" dependency to the class of the
+individual. Property values are shown as either UML attribute values
+or as UML links (UML terminology for an instance of an association). 
+
+<center>
+<p>
+<img src="owl-uml_fichiers/owl-individual.jpg">
+</p><p>
+<em>Two individuals of the class <code>Human</code></em>
+</p><p>
+</p></center>
+
+
+<h3>Enumerated classes</h3>
+
+Enumerated classes can be shown as a class together with the enumerated
+individuals represented as UML objects. 
+The number of instances of a class (class cardinality)
+can be shown in the UML class box by placing a number
+restriction in the right-upper corner. The example below defines a
+class for the so-called "Da Ponte" opera's composed by Mozart. There
+are precisely three individuals in this class. 
+<center>
+<p>
+<img src="owl-uml_fichiers/owl-enumeration-class.jpg">
+</p><p>
+<em>An enumerated class. The number "3" at the upper-right corer of the
+class box specifies that this class has exactly three instances. </em>
+</p><p>
+</p></center>
+
+The example above shows also an example of a class-scoped
+attribute (the underlined attribute <code>librettist</code>), 
+which indicates that the attribute value is the same for all instances of a
+class. In the example "Lorenzo da Ponte" is the librettist of all the
+opera's in this class and Mozart is the composer 
+(the fact that these attribute  values 
+are repeated in the figure  for each
+instance is a bug/feature of the drawing tool used). 
+<p>
+[TODO: link class-scoped property to OWL?!]
+
+</p><h2>Discussion</h2>
+
+TODO: discuss problems, limitations, alternatives
+
+
+<h2>References</h2>
+
+[1] G. Booch, J, Rumbaugh and I. Jacobson (1999). <em>The Unified Modelling
+Language User Guide</em>. Reading, MA, Addison-Wesley. ISBN 0-201-57168-4. 
+
+</body></html>

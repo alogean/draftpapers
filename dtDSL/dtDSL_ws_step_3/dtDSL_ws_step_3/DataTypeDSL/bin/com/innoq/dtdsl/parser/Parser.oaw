@@ -1,0 +1,17 @@
+<workflow>
+    <property name="doCheck" value="true"/>
+    <bean class="org.eclipse.mwe.emf.StandaloneSetup"/>
+    <bean class="com.innoq.dtdsl.MetaModelRegistration"/>
+	<component id="dtdsl-parser" class="com.innoq.dtdsl.parser.ParserComponent">
+		<modelFile value="${modelFile}"/>
+		<outputSlot value="${outputSlot}"/>
+	</component>
+	<if cond="${doCheck}">
+		<component id="dtdsl-checker" class="oaw.check.CheckComponent">
+	       <metaModel id="mm" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel"/>
+	       <expression value="${outputSlot}.eAllContents.union({${outputSlot}})"/>
+		   <checkFile value="com::innoq::dtdsl::GenChecks"/>
+		   <checkFile value="com::innoq::dtdsl::Checks"/>
+		</component>
+	</if>
+</workflow>

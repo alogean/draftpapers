@@ -1,0 +1,90 @@
+\documentclass[a4paper,20pt,notitlepage]{article}
+
+
+% Title Page
+\title{Proof of concept: GigaSpaces implementation of the SkyGuide INCH system}
+\author{A. Logean, G. Reimann, P. Heim}
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document addresses some architectural issues associated with a GigaSpaces implementation of the SkyGuide Inch system. 
+\end{abstract}
+
+\section{Motivations}
+\section{Component model}
+
+Here a brief overview of the different components used in the architecture definition:
+
+\begin{enumerate}
+ \item Cluster of 4 “message brokers”  distributed in 4 geographical locations
+\begin{itemize}
+ \item Zurich
+ \item Geneva
+ \item Bern
+ \item Lugano
+\end{itemize}
+ \item Services
+\begin{itemize}
+\item Gateway services
+
+\textit{Open questions}
+\begin{itemize}
+\item \textit{List of services for each location} 
+\item \textit{Are there geographic dependant ?}
+\item \textit{Are these services deployed within the server ?}
+\end{itemize}
+
+\item Persistence services (RDMS / MySQL)
+
+\item Monitoring / management services
+\end{itemize}
+
+\item Client positions (Rich/Fat clients / GUIs)
+\end{enumerate}
+
+
+\section{Non Functional Requirements}
+
+\subsection{Message Brokers}
+
+\subsection{Data}
+\begin{enumerate}
+ \item Size of data is known and not so big, no dynamic scaling necessary;
+ \begin{itemize}
+  \item \textit{Question: how big are there ?}
+ \end{itemize}
+ \item 40 data types, 500 data items (instances of a data type)
+ \item Some data should be persisted , some other not (for example data changing rapidly)
+ \item Some data are critical ( like blocking runways ) some other not (wind data). Some priority on data could be defined. 
+ \item Some data are geographically specific and other not
+\end{enumerate}
+
+\subsection{Services}
+\subsubsection{Gateway services}
+ \begin{itemize}
+  \item Each gatway service are redundant. If one crach the other take over the requests (hot standby);
+\item Each gatway service is a standalone application (no dependencies) and could be deployed on any server;
+\item \textbf{Service management}: it should be possible to control each service via JMX (start/restart/stop ... );
+\item \textbf{Service monitoring}: it should be possible to monitor the activity of each services (flow of data, some statistics, ....) cf monitoring services;
+\item \textit{Question: are there some dependencies between services ? Like a Service A consumes data from Service B etc..}
+ \end{itemize}
+
+\subsubsection{Persistency service}
+\begin{itemize}
+ \item Data that do not change rapidly have to be persisted;
+ \item By using Gigaspaces, the writing and reading in the database works in background and is handled by the space; 
+ \item In a GigaSpaces architecture this service would be used to (re-)initialize a client and to generate a check-up list (if still needed). It delivers the latest relevant objects for a specific (remote) client from the space;
+\end{itemize}
+
+\subsubsection{Monitoring and Management services}
+
+\section{GigaSpaces programming model}
+Here we should described how an event based system can be build based on the space paradigm.
+ 
+\section{Use Cases}
+Here we should try to list all the possible catastrophic scenari and show for each case possible fail-over capable architectures.
+
+\end{document}
